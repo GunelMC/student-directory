@@ -19,6 +19,8 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   name = STDIN.gets.chomp  # get the first name
+  name.empty? ? counter = 0 : counter = 1
+  
   while !name.empty? do # while the name is not empty, repeat this code
     insert_list(name, "april") # add the student hash to the array
     if @students.count > 1
@@ -27,8 +29,10 @@ def input_students
       puts "Now we have #{@students.count} student"
     end
     name = STDIN.gets.chomp # get another name from the user
+    counter += 1 if !name.empty?
   end
-  @students
+
+  puts "You have entered #{counter} new name(s)."
 end 
 
 
@@ -55,6 +59,7 @@ def show_students
   print_header
   print_students_list
   print_footer
+  puts "These are all the students."
 end
 
 def save_students
@@ -65,6 +70,7 @@ def save_students
     file.puts csv_line
   end
   file.close
+  puts "The list of students have been saved to the file."
 end 
 
 def load_students (filename = "students.csv")
@@ -74,6 +80,7 @@ def load_students (filename = "students.csv")
    insert_list(name, cohort)
   end
   file.close
+  puts "The list of students have been loaded from the file."
 end
 
 def try_load_students
@@ -98,6 +105,7 @@ def process(selection)
   if options[selection]
     method(options[selection]).call
   elsif selection == "9"
+    puts "Au revoir!"
     exit 
   else
     puts "I don't know what you meant, try again"
