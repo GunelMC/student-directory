@@ -5,8 +5,8 @@ require 'colorize'
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list to a csv file"
+  puts "4. Load the list from a csv file"
   puts "9. Exit"
 end
 
@@ -63,17 +63,33 @@ def show_students
 end
 
 def save_students
+  puts "Enter a file name to save to, if nothing is entered your data will be saved to students.csv."
+  filename = STDIN.gets.chomp
+  
+  if filename.empty?
+    filename = "students.csv"
+  end
+
   file = File.open("students.csv", "w") # open the file for writing
   @students.each do |student| # iterate over the array of students
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
+
   file.close
   puts "The list of students have been saved to the file."
 end 
 
-def load_students (filename = "students.csv")
+def load_students
+  puts "Enter a file name to load from, if nothing is entered data will be loaded from students.csv."
+  
+  filename = STDIN.gets.chomp
+  
+  if filename.empty?
+    filename = "students.csv"
+  end
+
   file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(",")
@@ -91,7 +107,7 @@ def try_load_students
   end
 
   if File.exists?(filename)
-    load_students(filename)
+    load_students
     puts "Loaded #{@students.count} from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
@@ -105,7 +121,7 @@ def process(selection)
   if options[selection]
     method(options[selection]).call
   elsif selection == "9"
-    puts "Au revoir!"
+    puts "Bye!"
     exit 
   else
     puts "I don't know what you meant, try again"
