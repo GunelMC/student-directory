@@ -58,7 +58,7 @@ def show_students
 end
 
 def save_students
-  file = File.open("students.csv", "a") # open the file for writing
+  file = File.open("students.csv", "w") # open the file for writing
   @students.each do |student| # iterate over the array of students
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
@@ -78,7 +78,11 @@ end
 
 def try_load_students
   filename = ARGV.first # first argument from the command line
-  return if filename.nil? # get out of the method if it isn't given
+
+  if filename.nil? # make the program load students.csv by default if no file is given on startup
+    filename = 'students.csv' # get out of the method if it isn't given
+  end
+  
   if File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
