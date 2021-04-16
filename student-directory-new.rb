@@ -82,7 +82,7 @@ def try_load_students
   if filename.nil? # make the program load students.csv by default if no file is given on startup
     filename = 'students.csv' # get out of the method if it isn't given
   end
-  
+
   if File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
@@ -92,22 +92,17 @@ def try_load_students
   end 
 end 
 
+#refactor the process method 
 def process(selection)
-  case selection
-    when "1"
-      input_students
-    when "2"
-      show_students
-    when "3"
-      save_students
-    when "4"
-      load_students
-    when "9"
-      exit
-    else
-      puts "I don't know what you meant, try again"
+  options = {"1" => "input_students","2" => "show_students","3" => "save_students", "4" => "load_students"}
+  if options[selection]
+    method(options[selection]).call
+  elsif selection == "9"
+    exit 
+  else
+    puts "I don't know what you meant, try again"
   end
-end 
+end
 
 def interactive_menu
   loop do
